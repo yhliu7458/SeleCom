@@ -95,7 +95,7 @@ SeleCom employs a two-stage training pipeline.
 
 In this stage, the selector is trained on a massive synthetic QA dataset with curriculum learning.
 
-We open-source the Stage 1 training dataset. Download the dataset from [SeleCom_Stage1_Training_Dataset](https://huggingface.co/Ryan7458/Selecom/tree/main) and run the training script.
+We open-source the Stage 1 training dataset. Download the dataset from [SeleCom_Stage1_Training_Dataset](https://huggingface.co/datasets/Ryan7458/SeleCom_Training/tree/main) and run the training script.
 
 ```
 cd main
@@ -106,7 +106,7 @@ bash train_stage1.sh
 
 In this stage, the generator is fine-tuned to utilize the compressed embeddings.
 
-We open-source the Stage 2 training dataset. You can use your own training data or download the dataset from [SeleCom_Stage2_Training_Dataset](https://huggingface.co/Ryan7458/Selecom/tree/main) and run the training script.
+We open-source the Stage 2 training dataset. You can use your own training data or download the dataset from [SeleCom_Stage2_Training_Dataset](https://huggingface.co/datasets/Ryan7458/SeleCom_Training/tree/main) and run the training script.
 
 ```
 cd main
