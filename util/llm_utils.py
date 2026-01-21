@@ -49,9 +49,9 @@ def get_select_prompt(model_name, questions, answers, num_pos):
 
 
 # Prompt template for generator of Stage 2 with <SOFT_PROMPT> tokens
-def get_qa_prompt(model_name, questions, documents, answers, num_pos):
+def get_qa_prompt(model_name, questions, documents, answers, num_pos, test=False):
     soft_prompts = []
-
+    
     if 'Qwen' in model_name:
         for question, document_list, answer in zip(questions, documents, answers):
             input_placeholder = '<SOFT_PROMPT_START>' + '<SOFT_PROMPT>' * num_pos + '<SOFT_PROMPT_END>'
@@ -67,7 +67,8 @@ def get_qa_prompt(model_name, questions, documents, answers, num_pos):
             instruction += "<answer>YOUR ANSWER</answer>\n"
             instruction += "3. You must not generate any other text."
             prompt = f'<|im_start|>user\n{instruction}<|im_end|>\n<|im_start|>assistant\n'
-            prompt += f'<answer>{answer.strip(".")}</answer><|im_end|>'
+            if not test:
+                prompt += f'<answer>{answer.strip(".")}</answer><|im_end|>'
             soft_prompts.append(prompt)
     elif 'Mistral' in model_name:
         for question, document_list, answer in zip(questions, documents, answers):
@@ -84,7 +85,8 @@ def get_qa_prompt(model_name, questions, documents, answers, num_pos):
             instruction += "<answer>YOUR ANSWER</answer>\n"
             instruction += "3. You must not generate any other text."
             prompt = f'[INST]\n{instruction} [/INST]\n'
-            prompt += f'<answer>{answer.strip(".")}</answer></s>'
+            if not test:
+                prompt += f'<answer>{answer.strip(".")}</answer></s>'
             soft_prompts.append(prompt)
 
     return soft_prompts

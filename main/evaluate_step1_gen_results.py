@@ -81,10 +81,13 @@ def process_batch_on_gpu(model, data_batch, device):
 
 def train():
 	parser = argparse.ArgumentParser()
-	parser.add_argument("--dataset", type=str, default='popqa')
+	parser.add_argument("--dataset", type=str, default='nq') # To be filled
+	parser.add_argument("--data_path", type=str, default='path/to/test/dataset') # To be filled
 	parser.add_argument("--encoder_name", type=str, default='path/to/your/model/position') # To be filled
 	parser.add_argument("--encoder_checkpoint_dir", type=str, default='path/to/checkpoint') # To be filled
 	parser.add_argument("--generator_name", type=str, default='path/to/your/model/position') # To be filled
+	parser.add_argument("--generator_checkpoint_dir", type=str, default='path/to/checkpoint') # To be filled
+	parser.add_argument("--evaluation_results_path", type=str, default='path/to/save/evaluation/results') # To be filled
 	parser.add_argument("--batch_size", type=int, default=4)
 	parser.add_argument("--encoder_max_length", type=int, default=2560)
 	parser.add_argument("--generator_max_length", type=int, default=1024)
@@ -94,16 +97,6 @@ def train():
 	parser.add_argument("--device_id", type=int, default=0)
 
 	args = parser.parse_args()
-	args.data_path = f'path/to/test/dataset/e.g./{args.dataset}.jsonl' # To be filled
-
-	# choose checkpoint based on top_k
-	# To be filled with your checkpoint paths
-	if args.rerank_top_k == 1:
-		args.generator_checkpoint_dir = ''
-	elif args.rerank_top_k == 5:
-		args.generator_checkpoint_dir = ''
-	else:
-		args.generator_checkpoint_dir = ''
 
 	device = torch.device(f'cuda:{args.device_id}' if torch.cuda.is_available() else 'cpu')
 
@@ -134,15 +127,11 @@ def train():
 	del model
 	torch.cuda.empty_cache()
 
-	evaluate_exact_match(all_outputs, all_groundtruths)
-	evaluate_f1(all_outputs, all_groundtruths)
-	evaluate_rouge_l(all_outputs, all_groundtruths)
-	evaluate_match(all_outputs, all_groundtruths)
 	save_jsonl([{
 		'question': all_questions[i],
 		'output': all_outputs[i],
 		'groundtruth': all_groundtruths[i]
-	} for i in range(len(all_outputs))], f'path/to/save/evaluation/results/{args.dataset}_top{args.rerank_top_k}_results.jsonl') # To be filled
+	} for i in range(len(all_outputs))], f'{args.evaluation_results_path}/{args.dataset}_top{args.rerank_top_k}_results.jsonl')
 
 
 if __name__ == "__main__":

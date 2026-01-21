@@ -104,13 +104,16 @@ def train():
 	parser.add_argument("--model_dir", type=str, default='path/to/save/model') # To be filled
 	parser.add_argument("--checkpoint_dir", type=str, default=None)
 	parser.add_argument("--epochs", type=int, default=1)
-	parser.add_argument("--learning_rate", type=int, default=0.00005)
+	parser.add_argument("--learning_rate", type=float, default=0.00005)
 	parser.add_argument("--batch_size", type=int, default=10)
 	parser.add_argument("--gradient_accumulation_steps", type=int, default=1)
 	parser.add_argument("--encoder_max_length", type=int, default=640)
 	parser.add_argument("--generator_max_length", type=int, default=256)
 	parser.add_argument("--random_seed", type=int, default=2025)
+	parser.add_argument("--save_steps", type=int, default=10000)
+	parser.add_argument("--logging_steps", type=int, default=100)
 	parser.add_argument("--log_dir", type=str, default='path/to/log/stage1') # To be filled
+	parser.add_argument("--log_name", type=str, default='train_stage1.log')
 	parser.add_argument("--num_emb_tokens", type=int, default=8)
 	parser.add_argument("--num_doc_tokens", type=int, default=2)
 	parser.add_argument("--local_rank", type=int, default=0)
@@ -131,16 +134,16 @@ def train():
 		num_train_epochs=args.epochs,
 		seed=args.random_seed,
 		save_strategy="steps",
-		save_steps=1000,
+		save_steps=args.save_steps,
 		warmup_steps=1000,
-		logging_steps=100,
+		logging_steps=args.logging_steps,
 		save_total_limit=5,
 		remove_unused_columns=False,
 		dataloader_pin_memory=True,
 		dataloader_num_workers=4,
 		gradient_accumulation_steps=args.gradient_accumulation_steps,
 		report_to='none', 
-		deepspeed='config.json',
+		deepspeed='dp_config.json',
 		bf16=True,
 		ddp_find_unused_parameters=False,
 	)
@@ -154,7 +157,7 @@ def train():
 	
 	
 	trainer.remove_callback(PrinterCallback)
-	file_cb = FilePrinterCallback(output_file=os.path.join(args.log_dir, 'your/log/file/name')) # To be filled
+	file_cb = FilePrinterCallback(output_file=os.path.join(args.log_dir, args.log_name))
 	trainer.add_callback(file_cb)
 	if args.checkpoint_dir is not None:
 		trainer.train(resume_from_checkpoint=args.checkpoint_dir)

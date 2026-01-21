@@ -101,13 +101,14 @@ def train():
 	parser.add_argument("--generator_name", type=str, default='path/to/your/model/position') # To be filled
 	parser.add_argument("--model_dir", type=str, default='path/to/save/model') # To be filled
 	parser.add_argument("--epochs", type=int, default=3)
-	parser.add_argument("--learning_rate", type=int, default=0.0001)
+	parser.add_argument("--learning_rate", type=float, default=0.0001)
 	parser.add_argument("--batch_size", type=int, default=3)
 	parser.add_argument("--gradient_accumulation_steps", type=int, default=1)
 	parser.add_argument("--encoder_max_length", type=int, default=2560)
 	parser.add_argument("--generator_max_length", type=int, default=1024)
 	parser.add_argument("--random_seed", type=int, default=2025)
 	parser.add_argument("--log_dir", type=str, default='path/to/log/stage2') # To be filled
+	parser.add_argument("--log_name", type=str, default='train_stage2.log')
 	parser.add_argument("--num_emb_tokens", type=int, default=8)
 	parser.add_argument("--num_doc_tokens", type=int, default=2)
 	parser.add_argument("--rerank_top_k", type=int, default=1)
@@ -134,7 +135,7 @@ def train():
 		dataloader_prefetch_factor=4,
 		gradient_accumulation_steps=args.gradient_accumulation_steps,
 		report_to='none', 
-		deepspeed='config.json',
+		deepspeed='dp_config.json',
 		bf16=True,
 		ddp_find_unused_parameters=False,
     )	
@@ -146,7 +147,7 @@ def train():
 		data_collator=data_collator(args)
     )
 	trainer.remove_callback(PrinterCallback)
-	file_cb = FilePrinterCallback(output_file=os.path.join(args.log_dir, "your/log/file/name")) # To be filled
+	file_cb = FilePrinterCallback(output_file=os.path.join(args.log_dir, args.log_name))
 	trainer.add_callback(file_cb)
 	trainer.train()
 

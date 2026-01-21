@@ -148,27 +148,28 @@ def evaluate_match(predictions, groundtruths):
 	print(f'Match: {correct}/{total} = {correct/total:.4f}')
 
 
-def evaluate_llm_as_a_judge(questions, predictions, groundtruths, model_name, max_retries=5):
+def evaluate_llm_as_a_judge(questions, predictions, groundtruths, model_name, num_gpus, max_retries=5):
 	assert len(predictions) == len(groundtruths)
 	if questions is not None:
 		assert len(questions) == len(predictions)
 	
 	llm = LLM(
 		model=model_name,
-		tensor_parallel_size=2,
-		gpu_memory_utilization=0.85,
+		tensor_parallel_size=num_gpus,
+		gpu_memory_utilization=0.9,
 		max_model_len=4096,
 		trust_remote_code=True,
 		dtype=torch.bfloat16
 	)
 	
+	# Set sampling parameters
 	sampling_params = SamplingParams(
 		temperature=0.2,
 		max_tokens=10
 	)
 	
 	eval_samples = []
-	sample_indices = [] 
+	sample_indices = []  # Record the original index for each evaluation sample
 	
 	for i, (pred, gt) in enumerate(zip(predictions, groundtruths)):
 		if pred is None:
