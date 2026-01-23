@@ -1,6 +1,6 @@
 # SeleCom
 
-This is the official implementation for the Full Paper: **Rethinking Soft Compression in Retrieval-Augmented Generation: A Query-Conditioned Selector Perspective**
+This is the official implementation for the WWW2026 Paper: **Rethinking Soft Compression in Retrieval-Augmented Generation: A Query-Conditioned Selector Perspective**
 
 <img src="figures/introduction.png" width=50%></img>
 
