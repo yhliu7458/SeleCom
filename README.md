@@ -37,7 +37,7 @@ This repository provides the implementation, data pipeline, and pretrained check
 
 ```
 # 1. Clone the repository
-git clone https://github.com/anonymous/SeleCom.git
+git clone https://github.com/yhliu7458/SeleCom.git
 cd SeleCom
 
 # 2. Create a virtual environment
