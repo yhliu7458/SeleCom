@@ -27,9 +27,12 @@ This repository provides the implementation, data pipeline, and pretrained check
 ├── log                       # Training and evaluation logs
 ├── main                      # Main entry point for training and evaluation
 ├── model                     # Core implementation (Selector, Projector, Generator)
+├── retrieval_source          # Scripts for building the retrieval corpus and FAISS index
 ├── results                   # Stores inference results from trained models
 └── util                      # Utility functions (metrics, config, data loading)
 ```
+
+The evaluation data are released separately on Hugging Face; see `data/eval/README.md` for the file list and download notes. The retrieval source construction scripts are provided in `retrieval_source/`; see `retrieval_source/README.md` for the recommended workflow.
 
 ## Run SeleCom
 
@@ -66,7 +69,7 @@ Huggingface link: [SeleCom_Trained_Model](https://huggingface.co/Ryan7458/Seleco
 
 **Step 2: Prepare Data**
 
-Download public datasets (e.g., NQ, TriviaQA) and process them into the (question, answer, documents) format. Save the processed file as a JSONL file (e.g., data/eval/nq_qa.jsonl).
+Download the evaluation data from Hugging Face as described in `data/eval/README.md`, or prepare your own data in the `(question, answer, documents)` JSONL format. For retrieval source construction, follow `retrieval_source/README.md`.
 
 **Step 3: Run Inference**
 
