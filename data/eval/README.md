@@ -13,4 +13,6 @@ Expected files:
 - `qda_triviaqa_multidoc.jsonl`
 - `qda_webqa_multidoc.jsonl`
 
+The HotpotQA file is prepared for the top-k=1 evaluation setting and contains one document per example.
+
 For single-document evaluation settings, use the first retrieved document in `documents`, i.e., `documents[0]`.
